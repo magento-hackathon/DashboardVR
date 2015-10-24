@@ -36,7 +36,7 @@ file_put_contents($unityData, '[', FILE_APPEND);
 $jsonPrefix = '';
 
 while($from < time()) {
-  
+
     $data = array();
     $data['ts'] = $from.'-'.$to;
 
@@ -44,27 +44,28 @@ while($from < time()) {
         ->addAttributeToFilter('created_at', array(
             'from' => date('Y-m-d', $from),
             'to' => date('Y-m-d', $to),
-        ))->setPageSize(100);
+        ));
+//->setPageSize(2);
 
     foreach ($salesCollection as $order) {
         $items = $order->getAllVisibleItems();
         foreach ($items as $item) {
-            $productsData[$item->getSku()] += $item->getQtyOrdered();
+            $productsData[$item->getName()] += $item->getQtyOrdered();
         };
 
         $data['sales'] += $order->getGrandTotal();
         $data['orders']++;
     }
 
-    sort($productsData);
+    asort($productsData);
 
-    $topProducts = array_slice($productsData, -5, 5);
+    $topProducts = array_slice($productsData, -5, 5, true);
+//die(print_r($productsData, true));
 
-    $i = 1;
+    $data['products'] = array();
 
-    foreach ($topProducts as $product) {
-        $data['product_' . $i] = $product;
-        $i++;
+    foreach ($topProducts as $key => $product) {
+        $data['products'][] = array('name' => $key, 'sold' => $product);
     }
 
     if($data != null){
@@ -76,7 +77,7 @@ while($from < time()) {
 
     $from = $to;
     $to = $from + $interval;
-    
+
     $jsonPrefix = ',';
 
 }
