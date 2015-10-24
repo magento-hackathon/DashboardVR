@@ -29,13 +29,22 @@ print PHP_EOL;
 print 'from : '.date('Y-m-d', $from).PHP_EOL;
 print 'to : '.date('Y-m-d', $to).PHP_EOL;
 
+$unityData = '../unity_data.json';
+
+file_put_contents($unityData, '[', FILE_APPEND);
+
+$jsonPrefix = '';
+
 while($from < time()) {
+  
+    $data = array();
+    $data['ts'] = $from.'-'.$to;
 
     $salesCollection = $salesModel->getCollection()
         ->addAttributeToFilter('created_at', array(
             'from' => date('Y-m-d', $from),
             'to' => date('Y-m-d', $to),
-        ));
+        ))->setPageSize(100);
 
     foreach ($salesCollection as $order) {
         $items = $order->getAllVisibleItems();
@@ -43,9 +52,8 @@ while($from < time()) {
             $productsData[$item->getSku()] += $item->getQtyOrdered();
         };
 
-        $data[$from.'-'.$to]['sales'] += $order->getGrandTotal();
-        $data[$from.'-'.$to]['orders']++;
-
+        $data['sales'] += $order->getGrandTotal();
+        $data['orders']++;
     }
 
     sort($productsData);
@@ -55,21 +63,22 @@ while($from < time()) {
     $i = 1;
 
     foreach ($topProducts as $product) {
-        $data[$from.'-'.$to]['product_' . $i] = $product;
+        $data['product_' . $i] = $product;
         $i++;
     }
 
-    $unityData = '../unity_data.json';
-
     if($data != null){
-        file_put_contents($unityData, json_encode(array($data)), FILE_APPEND);
+        file_put_contents($unityData, $jsonPrefix . json_encode($data), FILE_APPEND);
     }
 
     unset($data);
     unset($productsData);
 
-
     $from = $to;
     $to = $from + $interval;
+    
+    $jsonPrefix = ',';
 
 }
+
+file_put_contents($unityData, ']', FILE_APPEND);
