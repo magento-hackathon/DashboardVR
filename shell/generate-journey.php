@@ -62,7 +62,7 @@ while($from < time()) {
     $unityData = '../unity_data.json';
 
     if($data != null){
-        file_put_contents($unityData, json_encode($data), FILE_APPEND);
+        file_put_contents($unityData, json_encode(array($data)), FILE_APPEND);
     }
 
     unset($data);
