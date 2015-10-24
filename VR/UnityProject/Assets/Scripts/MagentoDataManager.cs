@@ -70,6 +70,9 @@ public class MagentoDataManager : MonoBehaviour {
 		MeshRenderer mr = salesCube.GetComponent<MeshRenderer>();
 		mr.sharedMaterial = mat;
 		mr.material.color = new Color(0, 0, 0.6f + 0.4f*(i%2), 1);
+
+		InfoField infoF = salesCube.AddComponent<InfoField>();
+		infoF.displayInfo = string.Format("Sales in Timespan {0}", sales[i].ts);
 	}
 
 	public void SpawnOrderCube(Vector3 polPos, int i, Material mat)
@@ -81,5 +84,8 @@ public class MagentoDataManager : MonoBehaviour {
 		MeshRenderer mr = salesCube.GetComponent<MeshRenderer>();
 		mr.sharedMaterial = mat;
 		mr.material.color = new Color(0.6f + 0.4f*(i%2), 0, 0, 1);
+
+		InfoField infoF = salesCube.AddComponent<InfoField>();
+		infoF.displayInfo = string.Format("Orders in Timespan {0}", sales[i].ts);
 	}
 }
