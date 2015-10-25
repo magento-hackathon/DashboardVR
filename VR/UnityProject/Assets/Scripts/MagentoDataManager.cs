@@ -90,9 +90,9 @@ public class MagentoDataManager : MonoBehaviour {
 
 		InfoField infoF = salesCube.AddComponent<InfoField>();
 
-		string timestamps = TimestampHelper.Instance (sales [i].ts).FormatFromToStr();
+		string timestamps = TimestampHelper.Instance (sales [i].ts).FormatFromStr();
 
-		infoF.displayInfo = string.Format("{0} sales between {1}", sales[i].sales, timestamps);
+		infoF.displayInfo = string.Format("{0}: {1} € sales", timestamps, sales[i].sales);
 		infoF.infoType = InfoField.InfoType.Money;
 	}
 
@@ -130,9 +130,9 @@ public class MagentoDataManager : MonoBehaviour {
 		mr.material.color = new Color(0.6f + 0.4f*(i%2), 0, 0, 1);
 
 		InfoField infoF = oderCube.AddComponent<InfoField>();
-		string timestamps = TimestampHelper.Instance (sales [i].ts).FormatFromToStr();
+		string timestamps = TimestampHelper.Instance (sales [i].ts).FormatFromStr();
 
-		infoF.displayInfo = string.Format("{0} orders between {1}", sales[i].orders, timestamps);
+		infoF.displayInfo = string.Format("{0}: {1} orders", timestamps, sales[i].orders);
 		infoF.infoType = InfoField.InfoType.Quantity;
 	}
 
@@ -152,9 +152,9 @@ public class MagentoDataManager : MonoBehaviour {
 		mr.material.color = new Color(0.6f + 0.4f*(i%2), 0, 0, 1);
 
 		InfoField infoF = oderCube.AddComponent<InfoField>();
-		string timestamps = TimestampHelper.Instance (sales [i].ts).FormatFromToStr();
+		string timestamps = TimestampHelper.Instance (sales [i].ts).FormatFromStr();
 		
-		infoF.displayInfo = string.Format("{0} Sold in Timeperiod {1}", sales[i].products[t].name, timestamps);
+		infoF.displayInfo = string.Format("{0}: {1} {2} €", timestamps, sales[i].products[t].name, sales[i].products[t].prize);
 		infoF.infoType = InfoField.InfoType.Quantity;
 	}
 }
