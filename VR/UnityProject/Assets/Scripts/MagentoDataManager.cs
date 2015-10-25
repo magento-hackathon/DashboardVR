@@ -19,8 +19,11 @@ public class MagentoDataManager : MonoBehaviour {
 			switch(req.State){
 			case HTTPRequestStates.Finished:
 				if(resp.IsSuccess){
-					sales = MagentoSales.GetMagentoSalesFromJson(resp.DataAsText);
-					PresentSales(sales);
+					GammaTimer timer = new GammaTimer(System.TimeSpan.FromSeconds(0.1f), ()=>{
+						sales = MagentoSales.GetMagentoSalesFromJson(resp.DataAsText);
+						PresentSales(sales);
+					});
+					timer.Start();
 				}else{
 					Debug.LogError("Response was not OK");
 				}
