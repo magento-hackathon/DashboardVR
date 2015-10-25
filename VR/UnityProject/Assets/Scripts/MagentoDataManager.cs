@@ -119,8 +119,7 @@ public class MagentoDataManager : MonoBehaviour {
 		mr.material.color = new Color(0, 0, 0.6f + 0.4f*(i%2) - 0.15f*t, 1);
 
 		InfoField infoF = salesCube.AddComponent<InfoField>();
-		
-		string timestamps = TimestampHelper.Instance (sales [i].ts).FormatFromToStr();
+
 		infoF.displayInfo = string.Format("Sales volume of Product {0}", sales[i].products[t].name);
 		infoF.infoType = InfoField.InfoType.Money;
 	}
