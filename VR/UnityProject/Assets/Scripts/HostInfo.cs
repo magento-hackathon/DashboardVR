@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HostInfo {
 
-	public const string host = "http://vrmag.megacomputer.ch/unity_data.json";
+	public const string host = "https://raw.githubusercontent.com/magento-hackathon/DashboardVR/master/VR/unity_data.json";
 
 
 }
