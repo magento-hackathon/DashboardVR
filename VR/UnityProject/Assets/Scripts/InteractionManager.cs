@@ -9,9 +9,20 @@ public class InteractionManager : MonoBehaviour {
 
 	public TextMesh infoDisplay;
 
+	public GammaInput.BasePointer editorPointer;
+	public GammaInput.BasePointer devicePointer;
+
 	void Awake()
 	{
 		instance = this;
+
+#if UNITY_EDITOR
+		editorPointer.enabled = true;
+		devicePointer.enabled = false;
+#else
+		editorPointer.enabled = false;
+		devicePointer.enabled = true;
+#endif
 	}
 
 	public void DisplayInfoField(InfoField infoField)
@@ -27,17 +38,4 @@ public class InteractionManager : MonoBehaviour {
 			root.AnimateDown();
 		}
 	}
-
-#if UNITY_EDITOR
-	void Update()
-	{
-		if(Input.GetMouseButton(0)){
-			if(root.headup){
-				root.AnimateDown();
-			}else{
-				root.AnimateUp();
-			}
-		}
-	}
-#endif
 }

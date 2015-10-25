@@ -121,7 +121,7 @@ public class MagentoDataManager : MonoBehaviour {
 		InfoField infoF = salesCube.AddComponent<InfoField>();
 		
 		string timestamps = TimestampHelper.Instance (sales [i].ts).FormatFromToStr();
-		infoF.displayInfo = string.Format("Sales volume of Product {0}", sales[i].products[t].name);
+		infoF.displayInfo = string.Format("{0}: {1}€ Sales Volume of:\n{2}", timestamps, sales[i].products[t].prize*sales[i].products[t].sold, sales[i].products[t].name);
 		infoF.infoType = InfoField.InfoType.Money;
 	}
 
@@ -162,7 +162,7 @@ public class MagentoDataManager : MonoBehaviour {
 		InfoField infoF = oderCube.AddComponent<InfoField>();
 		string timestamps = TimestampHelper.Instance (sales [i].ts).FormatFromStr();
 		
-		infoF.displayInfo = string.Format("{0}: {1} {2} €", timestamps, sales[i].products[t].name, sales[i].products[t].prize);
+		infoF.displayInfo = string.Format("{0}: \"{1}\" Sold {2} times", timestamps, sales[i].products[t].name, sales[i].products[t].sold);
 		infoF.infoType = InfoField.InfoType.Quantity;
 	}
 }
