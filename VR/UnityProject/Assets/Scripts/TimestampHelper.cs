@@ -5,6 +5,7 @@ public class TimestampHelper
 {
 	public DateTime from;
 	public DateTime to;
+	private string dateTimeFormat = "{0:yyyy_MM_dd}";
 
 	public TimestampHelper (string fromToTimestamp)
 	{
@@ -28,15 +29,18 @@ public class TimestampHelper
 	{
 		DateTime date = (new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))
                 .AddSeconds (double.Parse (timestamp));
-		// , CultureInfo.InvariantCulture
 
 		return date;
 	}
 
-	public string FormatFromToStr ()
+	public string FormatFromStr ()
 	{
-		return this.from.ToShortDateString () + " - " + this.to.ToShortDateString ();
+		return String.Format(this.dateTimeFormat, from);
 	}
 
+	public string FormatFromToStr ()
+	{
+		return String.Format(this.dateTimeFormat, from) + " - " + String.Format(this.dateTimeFormat, from);
+	}
 }
 
