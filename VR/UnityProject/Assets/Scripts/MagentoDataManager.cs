@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using BestHTTP;
+using System.Collections.Generic;
+using System.Linq;
 
 public class MagentoDataManager : MonoBehaviour {
 
@@ -23,7 +25,7 @@ public class MagentoDataManager : MonoBehaviour {
 				if(resp.IsSuccess){
 					GammaTimer timer = new GammaTimer(System.TimeSpan.FromSeconds(0.1f), ()=>{
 						sales = MagentoSales.GetMagentoSalesFromJson(resp.DataAsText);
-						PresentSales(sales);
+						PresentSales();
 					});
 					timer.Start();
 				}else{
@@ -41,8 +43,14 @@ public class MagentoDataManager : MonoBehaviour {
 	private Material default1Mat;
 	private Material default2Mat;
 
-	public void PresentSales(MagentoSales[] mySales)
+	public void PresentSales()
 	{
+		int max = 100;
+
+		if(sales.Length >= max){
+			sales = sales.Take(max).ToArray();
+		}
+
 		float angle = 360f/sales.Length;
 		float radius = sales.Length/(2*Mathf.PI) + 10;
 
