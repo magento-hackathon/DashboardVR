@@ -20,8 +20,6 @@ $productsData = array();
 
 $salesModel = Mage::getModel("sales/order");
 
-unlink('../unity_data.json');
-
 $from = time()-(3600*24*365*2);
 $to = $from + $interval;
 
@@ -31,6 +29,7 @@ print 'to : '.date('Y-m-d', $to).PHP_EOL;
 
 $unityData = '../unity_data.json';
 
+unlink($unityData);
 file_put_contents($unityData, '[', FILE_APPEND);
 
 $jsonPrefix = '';
@@ -47,25 +46,43 @@ while($from < time()) {
         ));
 //->setPageSize(2);
 
+    $productsDataOrdered = array();
+    $productsData = array();
+
     foreach ($salesCollection as $order) {
         $items = $order->getAllVisibleItems();
         foreach ($items as $item) {
-            $productsData[$item->getName()] += $item->getQtyOrdered();
+          
+            if(!array_key_exists($item->getName(), $productsDataOrdered)) {
+                $productsDataOrdered[$item->getName()] = 0;
+            }
+            
+            if(!array_key_exists($item->getName(), $productsData)) {
+                $productsData[$item->getName()] = array();
+            }
+          
+            $productsDataOrdered[$item->getName()] += $item->getQtyOrdered();
+            
+            if(!array_key_exists('prize', $productsData[$item->getName()])) {
+                $prize = floatval($item->getOriginalPrice());
+                $productsData[$item->getName()]['prize'] = $prize;
+            }
         };
 
         $data['sales'] += $order->getGrandTotal();
         $data['orders']++;
     }
 
-    asort($productsData);
+    asort($productsDataOrdered);
 
-    $topProducts = array_slice($productsData, -5, 5, true);
+    $topProducts = array_slice($productsDataOrdered, -5, 5, true);
 //die(print_r($productsData, true));
 
     $data['products'] = array();
 
     foreach ($topProducts as $key => $product) {
-        $data['products'][] = array('name' => $key, 'sold' => $product);
+        $prodData = $productsData[$key];
+        $data['products'][] = array('name' => $key, 'sold' => $product, 'prize' => $prodData['prize']);
     }
 
     if($data != null){
